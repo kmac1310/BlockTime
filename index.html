@@ -1,0 +1,99 @@
+<div id="blockTimePowerSystem">
+    <style>
+        #blockTimePowerSystem {
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #adff2f;
+            padding: 20px;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+        #blockTimePowerSystem .container {
+            background-color: #1a1a1a;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(173, 255, 47, 0.3);
+        }
+        #blockTimePowerSystem .header {
+            background-color: #adff2f;
+            color: #000;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 10px 10px 0 0;
+        }
+        #blockTimePowerSystem .date {
+            background-color: #000;
+            color: #adff2f;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+        #blockTimePowerSystem .section {
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+        }
+        #blockTimePowerSystem .icon {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+        #blockTimePowerSystem .label {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        #blockTimePowerSystem .value {
+            background-color: #adff2f;
+            color: #000;
+            padding: 5px 10px;
+            margin-left: 10px;
+            font-weight: bold;
+        }
+    </style>
+    <div class="container">
+        <div class="header">BLOCK TIME POWER SYSTEM</div>
+        <div class="date" id="currentDate"></div>
+        <div class="section">
+            <div class="icon">⚡</div>
+            <div class="label">1440TIME</div>
+            <div class="value" id="1440Time"></div>
+        </div>
+        <div class="section">
+            <div class="icon">⏱️</div>
+            <div class="label">BLOCK TIME</div>
+            <div class="value" id="blockTime"></div>
+        </div>
+        <div class="section">
+            <div class="icon">📅</div>
+            <div class="label">OCTOBER 1ST 2024</div>
+            <div class="value" id="countdownTime"></div>
+        </div>
+    </div>
+
+    <script>
+        function updateDateTime() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
+            document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', options);
+
+            const minutesInDay = 24 * 60;
+            const minutesPassed = now.getHours() * 60 + now.getMinutes();
+            const timeLeft1440 = minutesInDay - minutesPassed;
+            document.getElementById('1440Time').textContent = timeLeft1440;
+
+            const workEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 21, 0, 0);
+            let blockTimeRemaining = Math.max(0, Math.floor((workEnd - now) / 60000));
+
+            const blockTimeText = `5pm-9pm ${blockTimeRemaining}`;
+            document.getElementById('blockTime').textContent = blockTimeText;
+
+            const endDate = new Date(2024, 9, 1);
+            const timeDiff = endDate - now;
+            const minutesRemaining = Math.floor(timeDiff / 60000);
+            document.getElementById('countdownTime').textContent = minutesRemaining;
+        }
+
+        updateDateTime();
+        setInterval(updateDateTime, 60000);
+    </script>
+</div>
