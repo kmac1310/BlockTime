@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Block Tax Season Harvest 2024</title>
+    <title>Block Tax Season Harvest 2026</title>
     <style>
         body, html {
             margin: 0;
@@ -116,7 +116,7 @@
 </head>
 <body>
     <div id="blockTaxSystem">
-        <div class="header">BLOCK TAX SEASON<br>HARVEST 2024</div>
+        <div class="header">BLOCK TAX SEASON<br>HARVEST 2026</div>
         <div class="date" id="currentDate"></div>
         <div class="tax-harvest">
             <div>Tax Harvest Over</div>
@@ -144,9 +144,8 @@
             <div id="quoteText" class="quote-text"></div>
         </div>
         <div class="news">
-            <div class="news-title">Latest IRS News</div>
-            <div id="irsNews">Loading...</div>
-            <div id="irsNewsDate" class="news-date"></div>
+            <div class="news-title">Tax Season Reminder</div>
+            <div id="taxReminder" style="font-size: 0.85em;"></div>
         </div>
     </div>
     <script>
@@ -177,18 +176,15 @@
             
             updateBlockTimeDisplay();
             
-            const endDate = new Date(2024, 9, 1);
+            // Tax deadline: April 15, 2026 at 11:59 PM
+            const endDate = new Date(2026, 3, 15, 23, 59, 59);
             const timeDiff = endDate - now;
             const minutesRemaining = Math.floor(timeDiff / 60000);
             document.getElementById('countdownTime').textContent = formatNumber(minutesRemaining);
         }
 
         function formatNumber(num) {
-            if (num >= 100000) {
-                return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace(/,/, "'");
-            } else {
-                return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            }
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }
 
         function updateBlockTime() {
@@ -237,26 +233,24 @@
             return `${hours}:${minutes}${ampm}`;
         }
 
-        function fetchIRSNews() {
-            const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-            const irsRssUrl = 'https://www.irs.gov/newsroom/feed';
+        function setTaxReminder() {
+            const taxReminders = [
+                "Filing deadline: April 15, 2026 📅",
+                "Maximum contributions: Check IRA & 401(k) limits for 2025",
+                "Standard deduction 2025: $14,600 (Single) / $29,200 (Married)",
+                "Remember: Document all charitable contributions 🎁",
+                "Tip: Organize receipts by category for faster processing",
+                "E-file for fastest refunds - usually 21 days or less",
+                "Self-employed? Don't forget quarterly estimated payments",
+                "Child Tax Credit: Up to $2,000 per qualifying child",
+                "HSA contributions are triple tax-advantaged 💰",
+                "Review last year's return for carryover items"
+            ];
             
-            fetch(proxyUrl + irsRssUrl)
-                .then(response => response.text())
-                .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
-                .then(data => {
-                    const items = data.querySelectorAll("item");
-                    const latestItem = items[0];
-                    const title = latestItem.querySelector("title").textContent;
-                    const pubDate = new Date(latestItem.querySelector("pubDate").textContent);
-                    
-                    document.getElementById('irsNews').textContent = title;
-                    document.getElementById('irsNewsDate').textContent = pubDate.toLocaleDateString();
-                })
-                .catch(error => {
-                    console.error('Error fetching IRS news:', error);
-                    document.getElementById('irsNews').textContent = 'Unable to fetch news';
-                });
+            const today = new Date();
+            const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+            const randomIndex = seed % taxReminders.length;
+            document.getElementById('taxReminder').textContent = taxReminders[randomIndex];
         }
 
         function setDailyQuote() {
@@ -268,8 +262,7 @@
 
         updateDateTime();
         setInterval(updateDateTime, 60000);
-        fetchIRSNews();
-        setInterval(fetchIRSNews, 3600000); // Fetch news every hour
+        setTaxReminder();
         setDailyQuote();
     </script>
 </body>
